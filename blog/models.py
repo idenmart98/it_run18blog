@@ -1,5 +1,11 @@
 from django.db import models
-class Blog(models.Model):
-    teg = models.CharField(max_length=50)
+
+class Tag(models.Model):
+    name = models.CharField(max_length=100)
+
+class Post(models.Model):
+    tag = models.CharField(max_length=50)
     article = models.TextField()
+
+    tags = models.ManyToManyField(Tag,related_name= 'post', verbose_name = 'Теги')
 
