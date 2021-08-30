@@ -1,5 +1,14 @@
 {% extends 'base.html' %}
     {% block content%}
+        {% if tag %}
+            <br>   
+            <a class='btn btn-primary' href = "{% url 'blog:tag_edit' pk=tag.pk %}">Изменить</a>
+            <br>  
+            <br>   
+            <a class='btn btn-primary' href = "{% url 'blog:tag_delete' pk=tag.pk %}">delete</a>
+            <br>  
+        {% endif %}
+        <br>
         {% for post in posts %}
             <div class="card">
              <div class="card-body">

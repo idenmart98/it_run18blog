@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+    <br>
+    <br>
+    <form action = {% url 'blog:post_edit' pk=post.pk %} , method='POST'>
+        {% csrf_token %}
+        {{form}}
+        <button class = 'btn btn-primary'>
+            Изменить
+        </button>
+    </form>
+{% endblock%}

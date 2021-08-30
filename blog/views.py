@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
+
 from .models import Post, Tag
+from .forms import TagForm, PostForm
 
 # Create your views here.
 
@@ -16,8 +18,55 @@ def post_detail(request, pk):
 
 
 def tag_detail(request, pk):
+    tag = Tag.objects.get(id=pk)
     tags = Tag.objects.all()
     posts = Post.objects.filter(tags__id = pk)
-    return render(request, 'post_list.html', context = {"posts":posts, "tags": tags})
+    return render(request, 'post_list.html', context = {"posts":posts, "tags": tags, "tag": tag})
+
+def tag_create(request):
+    form = TagForm(request.POST or None)
+    tags = Tag.objects.all()
+    if request.method == 'POST':
+        form.save()
+        return redirect('blog:post_list')
+    return render( request, 'tag_create.html', context= {'form':form, 'tags': tags})
+
+def post_create(request):
+    form = PostForm(request.POST or None)
+    tags = Tag.objects.all()
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return redirect('blog:post_list')
+    return render( request, 'post_create.html', context= {'form':form, 'tags': tags})
+
+def tag_edit(request, pk):
+    tag =  Tag.objects.get(id=pk)
+    form = TagForm(request.POST or None, instance=tag)
+    tags = Tag.objects.all()
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return redirect('blog:post_list')
+    return render( request, 'tag_update.html', context= {'form':form, 'tags': tags, 'tag':tag})
+
+
+def post_edit(request, pk):
+    post =  Post.objects.get(id=pk)
+    form = PostForm(request.POST or None, instance=post)
+    tags = Tag.objects.all()
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return redirect('blog:post_list')
+    return render( request, 'post_update.html', context= {'form':form, 'tags': tags, 'post':post})
+
+def post_delete(request, pk):
+    Post.objects.filter(pk=pk).delete()
+    return redirect('blog:post_list')
+
+def tag_delete(request, pk):
+    Tag.objects.filter(pk=pk).delete()
+    return redirect('blog:post_list')
 
 
