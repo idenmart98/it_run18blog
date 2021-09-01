@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
     {% block content %}
+        <h1>{{post.views}}</h1>
         <br>
         <a class='btn btn-primary' href = "{% url 'blog:post_edit' pk=post.pk %}">Изменить</a>
         <br>
@@ -8,7 +9,28 @@
         <br>
         <h1>{{post.name}}</h1>
         <p>{{post.article}}</p>
+        <a class="btn btn-block btn-primary" href="{% url 'blog:post_like' pk=post.pk %}"><i class="fa fa-thumbs-up">Like</i> {{post.liked}}</a>
         {% for tag in post.tags.all %}
             <a href="{% url 'blog:tag_detail' pk=tag.id %}"><h1> {{tag.name}} </h1></a>
         {% endfor %}
+        <br>
+        <br>
+        {% for com in post.comment.all %}
+        <div class="alert alert-secondary" role="alert">
+            <h4>{{com.name}}</h4>
+            <p> {{com.text}} <p>
+        </div>
+            
+        {% endfor %}
+        <br>
+        <br>
+        <form action = "{% url 'blog:post_detail' pk=post.pk %}" , method='POST'>
+            {% csrf_token %}
+            {{form.name}}
+            {{form.email}}
+            {{form.text}}
+            <button class = 'btn btn-primary'>
+                Создать
+            </button>
+        </form>
     {% endblock %}

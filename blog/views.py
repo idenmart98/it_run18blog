@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
-from .models import Post, Tag
-from .forms import TagForm, PostForm
+from .models import Comment, Post, Tag
+from .forms import TagForm, PostForm, CommentForm
 
 # Create your views here.
 
@@ -13,8 +13,19 @@ def post_list(request):
 
 def post_detail(request, pk):
     post = Post.objects.get(pk=pk)
+    form = CommentForm(request.POST or None)
+    post.views +=1
+    post.save ()
+    if request.method == 'POST':
+        Comment.objects.create(
+            name=form.data['name'], 
+            email = form.data['email'], 
+            text = form.data['text'],
+            post=post
+            )
+        return redirect('blog:post_detail',pk=pk)
     tags = Tag.objects.all()
-    return render(request, 'post_detail.html', context = {'post': post, "tags":tags})
+    return render(request, 'post_detail.html', context = {'post': post, "tags":tags , 'form':form})
 
 
 def tag_detail(request, pk):
@@ -65,8 +76,14 @@ def post_delete(request, pk):
     Post.objects.filter(pk=pk).delete()
     return redirect('blog:post_list')
 
+def post_like(request, pk):
+    post = Post.objects.get(pk=pk)
+    count = post.liked
+    post.liked=count+1
+    post.save()
+    return redirect('blog:post_detail', pk=pk)
+
+
 def tag_delete(request, pk):
     Tag.objects.filter(pk=pk).delete()
     return redirect('blog:post_list')
-
-

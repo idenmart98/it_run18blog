@@ -9,7 +9,8 @@ from .views import (
     tag_edit, 
     post_edit, 
     post_delete,
-    tag_delete
+    tag_delete,
+    post_like
 )
 
 
@@ -21,6 +22,7 @@ urlpatterns = [
     path('posts/create', post_create, name = "post_create" ),
     path('posts/<int:pk>/update', post_edit, name = "post_edit" ),
     path('posts/<int:pk>/delete', post_delete, name = "post_delete" ),
+    path('posts/liked/<int:pk>/', post_like, name = "post_like" ),
     path('tags/<int:pk>/delete', tag_delete, name = "tag_delete" ),
     path('tags/<int:pk>/', tag_detail, name = "tag_detail" ),
     path('tags/create', tag_create, name = "tag_create" ),
