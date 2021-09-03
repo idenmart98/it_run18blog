@@ -10,7 +10,7 @@ from .views import (
     post_edit, 
     post_delete,
     tag_delete,
-    post_like
+    post_like,
 )
 
 
