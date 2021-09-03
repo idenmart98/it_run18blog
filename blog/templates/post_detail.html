@@ -7,9 +7,8 @@
         <br>
         <a class='btn btn-primary' href = "{% url 'blog:post_delete' pk=post.pk %}">Удалить</a>
         <br>
-        <h1>{{post.name}}</h1>
-        <p>{{post.article}}</p>
-        <a class="btn btn-block btn-primary" href="{% url 'blog:post_like' pk=post.pk %}"><i class="fa fa-thumbs-up">Like</i> {{post.liked}}</a>
+        <p>{{post.article.html | safe }}</p>
+        <button class="btn btn-block btn-primary" id = 'like' ><i class="fa fa-thumbs-up">Like</i> <p id='like_count'>{{post.liked}}</p></button>
         {% for tag in post.tags.all %}
             <a href="{% url 'blog:tag_detail' pk=tag.id %}"><h1> {{tag.name}} </h1></a>
         {% endfor %}
@@ -36,4 +35,25 @@
                 Создать
             </button>
         </form>
+<script>
+$(document).ready(function(){
+    $("#like").click(function(){
+        $.ajax({
+            type: "get",
+            url: "{% url 'blog:post_like' pk=post.pk %}",
+            method: 'GET',
+            dataType: "json",
+            data: {
+                '1': 1
+                },
+            success: function(data){
+                $('#like_count').text(data['likes']);
+            },
+            error: function(){
+                alert("error");
+            }
+        });
+    });
+});
+</script>
     {% endblock %}

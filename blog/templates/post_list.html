@@ -10,10 +10,11 @@
         {% endif %}
         <br>
         {% for post in posts %}
-            <div class="card">
-             <div class="card-body">
-                <a href = "{% url 'blog:post_detail' pk=post.id %}">{{post.name}}</a>
-             </div>
-            </div>
+                <div class="card" style="width: 18rem;">
+                    <img src="{{post.image.url}}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <a href = "{% url 'blog:post_detail' pk=post.id %}">{{post.name}}</a>
+                    </div>
+                </div>
         {% endfor %}
     {% endblock %}

@@ -2,9 +2,10 @@
 {% block content %}
     <br>
     <br>
-    <form action = {% url 'blog:post_create' %} , method='POST'>
+    {% include 'django_quill/media.html' %}
+    <form action = {% url 'blog:post_create' %}  method='POST' enctype="multipart/form-data">
         {% csrf_token %}
-        {{form}}
+        {{form.as_p}}
         <button class = 'btn btn-primary'>
             Создать
         </button>

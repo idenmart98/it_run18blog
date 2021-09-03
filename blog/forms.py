@@ -1,7 +1,8 @@
 from django import forms
 from django.forms import fields
+from django_quill.forms import QuillFormField
 
-from .models import Tag, Post, Comment, PostImage
+from .models import Tag, Post, Comment
 
 
 
@@ -12,20 +13,17 @@ class TagForm(forms.ModelForm):
 
 
 class PostForm(forms.ModelForm):
-    
+    article = QuillFormField()
     class Meta: 
         model = Post
-        fields = ('name', 'article', 'tags')
+        fields = ('name', 'article', 'tags', 'image')
 
 class CommentForm(forms.ModelForm):
     class Meta: 
         model = Comment
         fields = ('name', 'email', 'text', 'post')
 
-class ImageForm(forms.ModelForm):
-    class Meta:
-        model = PostImage
-        fields = ('image',)    
+  
 
 
 

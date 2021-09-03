@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
-from .models import Comment, Post, PostImage, Tag
-from .forms import TagForm, PostForm, CommentForm, ImageForm
+from .models import Comment, Post, Tag
+from .forms import TagForm, PostForm, CommentForm
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -14,8 +15,6 @@ def post_list(request):
 def post_detail(request, pk):
     post = Post.objects.get(pk=pk)
     form = CommentForm(request.POST or None)
-    image = post.image.all()
-    image = PostImage.objects.filter(post=post)
     post.views +=1
     post.save ()
     if request.method == 'POST':
@@ -27,7 +26,7 @@ def post_detail(request, pk):
             )
         return redirect('blog:post_detail',pk=pk)
     tags = Tag.objects.all()
-    return render(request, 'post_detail.html', context = {'post': post, "tags":tags , 'form':form, 'image': image})
+    return render(request, 'post_detail.html', context = {'post': post, "tags":tags , 'form':form })
 
 
 def tag_detail(request, pk):
@@ -45,9 +44,12 @@ def tag_create(request):
     return render( request, 'tag_create.html', context= {'form':form, 'tags': tags})
 
 def post_create(request):
-    form = PostForm(request.POST or None)
+    print(request.FILES)
+    form = PostForm()
     tags = Tag.objects.all()
+    print(form.errors)
     if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('blog:post_list')
@@ -83,7 +85,10 @@ def post_like(request, pk):
     count = post.liked
     post.liked=count+1
     post.save()
-    return redirect('blog:post_detail', pk=pk)
+    data = {
+        'likes':post.liked
+    }
+    return JsonResponse(data)
 
 
 def tag_delete(request, pk):
