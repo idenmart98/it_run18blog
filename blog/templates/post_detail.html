@@ -14,13 +14,16 @@
             <a href="{% url 'blog:tag_detail' pk=tag.id %}"><h1> {{tag.name}} </h1></a>
         {% endfor %}
         <br>
+        {% for img in image %}
+            <img style = "float:right; margin: -560px 00px 0px 15px; width:350px; height:250px;" src="{{img.image.url}}" alt="home" />
+        {% endfor %}
         <br>
         {% for com in post.comment.all %}
         <div class="alert alert-secondary" role="alert">
             <h4>{{com.name}}</h4>
             <p> {{com.text}} <p>
         </div>
-            
+
         {% endfor %}
         <br>
         <br>

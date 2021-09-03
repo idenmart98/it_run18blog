@@ -29,3 +29,9 @@ class Comment(models.Model):
     def __str__(self):
         return f'Комментарий был оставлен {self.name} к посту {self.post}'
 
+class PostImage(models.Model):
+    post = models.ForeignKey(Post,related_name= 'image',  on_delete=models.CASCADE)
+    image = models.ImageField()
+
+    def __str__(self):
+        return f'Фото было добавлено к блогу {self.post}'

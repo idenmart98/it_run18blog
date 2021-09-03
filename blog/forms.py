@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import fields
 
-from .models import Tag, Post, Comment
+from .models import Tag, Post, Comment, PostImage
 
 
 
@@ -21,7 +21,11 @@ class CommentForm(forms.ModelForm):
     class Meta: 
         model = Comment
         fields = ('name', 'email', 'text', 'post')
-    
+
+class ImageForm(forms.ModelForm):
+    class Meta:
+        model = PostImage
+        fields = ('image',)    
 
 
 
