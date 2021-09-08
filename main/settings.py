@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
+    'authe',
     'django_quill',
 ]
 
@@ -51,6 +52,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+AUTH_USER_MODEL = 'authe.Author'
 
 ROOT_URLCONF = 'main.urls'
 
@@ -103,6 +106,20 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+EMAIL_FROM = 'andreymalinov17@gmail.com'
+EMAIL_BCC = 'Qualle'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'andreymalinov17@gmail.com'
+EMAIL_HOST_PASSWORD = '*q$Yx!!4mg'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+SERVER_EMAIL = 'andreymalinov17@gmail.com'
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -131,3 +148,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 STATIC_DIRS = [
    
 ]
+
+SITE_URL = 'http://127.0.0.1:8000/'
