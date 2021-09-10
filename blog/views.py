@@ -8,6 +8,7 @@ from django.http import JsonResponse
 # Create your views here.
 
 def post_list(request):
+    print(request.user)
     tags = Tag.objects.all()
     posts = Post.objects.all()
     return render(request, 'post_list.html', context = {"posts":posts, "tags":tags})
