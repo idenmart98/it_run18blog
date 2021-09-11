@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
+from django.utils.crypto import get_random_string 
 
 from .models import Author, ConfirmCode
 from .forms import LoginForm, RegisterForm,ResetPassword
@@ -30,7 +31,7 @@ def register_view(request):
     return render(request, 'register.html', {'form': form})
 
 def confirm_view(request, code):
-    code = ConfirmCode.objects.filter(code = code)
+    code= ConfirmCode.objects.filter(code = code)
     form = RegisterForm(None)
     message = 'Код не найден'
     if code:
@@ -73,4 +74,22 @@ def reset_password(request):
         message = 'Такого пользователя нет'
         return render(request,'reset.html',{'form':form,'message':message})
     return render(request,'reset.html',{'form':form,'message':message})
+
+def new_password(request, code):
+    message = 'Неверный код'
+    form = ResetPassword(request.POST or None)
+    if ConfirmCode.objects.filter(code=code):
+        code = ConfirmCode.objects.get(code=code)
+        if not code.confirm:
+            code.confirm = True
+            code.save()
+            new_password = get_random_string(length=6)
+            code.customer.set_password(new_password)
+            code.customer.save()
+            send_register_mail(new_password,code.customer.email)
+            return render (request, 'reset.html', {'form':form,'message': 'Ваш пароль выслан на почту'})
+        return render(request, 'reset.html', {'form':form,'message': 'Ваш пароль уже сброшен'}) 
+    return render(request, 'reset.html', {'form':form,'message':message}) 
+
+        
 

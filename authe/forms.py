@@ -25,3 +25,4 @@ class LoginForm(forms.Form):
 
 class ResetPassword(forms.Form):
     email = forms.EmailField()
+
