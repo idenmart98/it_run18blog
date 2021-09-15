@@ -1,5 +1,8 @@
 from django.db import models
 from django_quill.fields import QuillField
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class Tag(models.Model):
     name = models.CharField(max_length=100)
@@ -14,6 +17,7 @@ class Post(models.Model):
     liked = models.IntegerField(default=0)
     views = models.IntegerField(default=0)
     tags = models.ManyToManyField(Tag,related_name= 'post', verbose_name = 'Теги')
+    author = models.ForeignKey(User,related_name='posts', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name

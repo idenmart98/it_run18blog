@@ -45,14 +45,14 @@ def tag_create(request):
     return render( request, 'tag_create.html', context= {'form':form, 'tags': tags})
 
 def post_create(request):
-    print(request.FILES)
     form = PostForm()
     tags = Tag.objects.all()
-    print(form.errors)
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            post = form.save(commit = False)
+            post.author = request.user
+            post.save()
             return redirect('blog:post_list')
     return render( request, 'post_create.html', context= {'form':form, 'tags': tags})
 
@@ -96,13 +96,7 @@ def tag_delete(request, pk):
     Tag.objects.filter(pk=pk).delete()
     return redirect('blog:post_list')
 
-# def post_image(request, pk):
-#     post = Post.objects.get(pk=pk)
-#     form = ImageForm(request.POST or None)
-#     if request.method == 'POST':
-#         Comment.objects.create(
-#             image=form.data['image'], 
-#             )
-#         return redirect('blog:post_detail',pk=pk)
-#     tags = Tag.objects.all()
-#     return render(request, 'post_detail.html', context = {'post': post, "tags":tags , 'form':form})
+def author_posts_list(request, user_id):
+    tags = Tag.objects.all()
+    posts = Post.objects.filter(author=user_id)
+    return render(request, 'post_list.html', context = {"posts":posts, "tags":tags})

@@ -14,6 +14,7 @@
                     <img src="{{post.image.url}}" class="card-img-top" alt="...">
                     <div class="card-body">
                         <a href = "{% url 'blog:post_detail' pk=post.id %}">{{post.name}}</a>
+                        <a href = "{% url 'blog:author_posts_list' user_id=post.author.id %}">{{post.author.email}}</a>
                     </div>
                 </div>
         {% endfor %}
