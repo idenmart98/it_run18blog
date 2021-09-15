@@ -25,3 +25,7 @@ class LoginForm(forms.Form):
 
 class ResetPassword(forms.Form):
     email = forms.EmailField()
+
+class NewPassword(forms.Form):
+    old_password = forms.CharField()
+    new_password = forms.CharField()
